@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  zerotier:
+    build: .
+    environment:
+      - ZEROTIER_NETWORK_ID=${{ secrets.zerotier_network_id }}
+      - ZEROTIER_API_TOKEN=${{ secrets.zerotier_api_token }}
+      - ZEROTIER_NODE_IP=${{ secrets.zerotier_node_ip }}
+      - ZEROTIER_GATEWAY_IP=${{ secrets.zerotier_gateway_ip }}
+    volumes:
+      - /var/lib/zerotier-one
+    restart: unless-stopped
+    networks:
+      - zerotier_network
+
+networks:
+  zerotier_network:
+    driver: bridge
