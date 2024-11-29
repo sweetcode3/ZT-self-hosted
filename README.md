@@ -21,13 +21,15 @@
 - Если вы хотите настроить выходную ноду, укажите её IP в секрете `zerotier_gateway_ip`.
 - 
 
-# Structure:
+# Структура проекта:
 ```
 .
 ├── .github
 │   └── workflows
-│       └── zerotier-setup.yml
-├── Dockerfile
-├── docker-compose.yml
-└── README.md
+│       └── zerotier-setup.yml          # GitHub Workflow для автоматической настройки
+├── Dockerfile                          # Dockerfile для создания образа с ZeroTier
+├── docker-compose.yml                  # Docker Compose файл для управления контейнерами
+├── start-zerotier.sh                   # Скрипт для подключения к ZeroTier и настройки
+└── README.md                           # Руководство пользователя
+
 ```
