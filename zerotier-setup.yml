@@ -1,0 +1,40 @@
+name: Setup ZeroTier Network
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  setup-zerotier:
+    runs-on: self-hosted
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image
+        run: |
+          docker-compose build
+
+      - name: Run ZeroTier container
+        run: |
+          docker-compose up -d
+
+      - name: Wait for ZeroTier connection
+        run: |
+          docker-compose exec zerotier bash -c "until zerotier-cli info | grep -q 'ONLINE'; do echo 'Ожидаем подключения к сети...'; sleep 5; done"
+
+      - name: Verify ZeroTier connection
+        run: |
+          docker-compose exec zerotier zerotier-cli info
+
+      - name: Restart ZeroTier if not connected
+        if: failure()
+        run: |
+          echo "ZeroTier не подключен, перезапуск..."
+          docker-compose restart zerotier
